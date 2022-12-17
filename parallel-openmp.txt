@@ -1,0 +1,99 @@
+// parallel matrix multiplication.cpp : 此檔案包含 'main' 函式。程式會於該處開始執行及結束執行。
+//
+
+#include<stdio.h>
+#include<iostream>
+#include<stdlib.h>
+#include<time.h>
+#include<omp.h>
+
+using namespace std;
+int thread1_sum = 0, thread2_sum = 0, thread3_sum = 0, thread4_sum = 0;
+
+
+void mySleep()
+{
+	int i_max = 10, j_max = 10;
+	int i, j, s;
+	for (i = 0; i < i_max; i++)
+	{
+		for (j = 0; j < j_max; j++)
+		{
+			s = i + j;
+		}
+	}
+
+}
+
+void to_thread(int num_thread)
+{
+	//int x, y;
+
+	int arrayA[4][1500];
+	int a = 0, b = 0, c = 0, d = 0;
+	int Q = 1;
+
+	omp_set_num_threads(num_thread);
+	//cout << "執行緒個數： " << num_thread << endl;
+
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 1500; j++)
+		{
+			arrayA[i][j] = Q;
+		}
+		Q+=1;
+	}
+
+
+#pragma omp parallel for
+
+	for (int x = 0; x < 4; x++)
+	{
+		for (int y = 0; y < 1500; y++)
+		{
+			a += arrayA[x][y];
+			thread1_sum = a;
+			mySleep();
+		}
+	}
+}
+
+
+
+
+int main()
+{
+	mySleep();
+	clock_t start;
+	clock_t interval_4;
+
+	start = clock();
+	to_thread(4); 
+	interval_4 = clock() - start;
+
+	double interval_4_sec = interval_4 / (double)CLOCKS_PER_SEC;
+
+
+	int ANS = 0;
+
+	clock_t interval_1;
+
+	start = clock();
+	to_thread(1); 
+	interval_1 = clock() - start;
+
+	double interval_1_sec = interval_1 / (double)CLOCKS_PER_SEC;
+
+	ANS = thread1_sum + thread2_sum + thread3_sum + thread4_sum;
+	cout << ANS << endl;
+
+
+	double speedup = interval_1_sec / interval_4_sec;
+	double eff = speedup / interval_1_sec; // 執行緒個數：4
+
+	printf("%lf speedup\n", speedup);
+
+}
+

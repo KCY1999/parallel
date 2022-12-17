@@ -1,0 +1,94 @@
+#define endmark -1
+
+
+int stream c23;
+int stream c35;
+int stream c57;
+int stream c7o;
+int stream c2in;
+
+void P2()
+{
+    int xvalued;
+    recv(c2in, xvalued);
+    while(xvalued!= endmark)
+    {
+        if (xvalued%2 !=0)
+	{
+        	send(c23, xvalued);
+	} 
+        recv(c2in, xvalued);
+    }
+    send(c23 , endmark);
+    
+}
+void P3()
+{
+    int xvalued;
+    recv(c23, xvalued);
+    while(xvalued!= endmark)
+    {
+        if (xvalued%3 !=0)
+	{
+        	send(c35, xvalued);
+	}
+        recv(c23, xvalued);    
+    }
+    send(c35 , endmark);
+    
+}
+void P5()
+{
+    int xvalued;
+    recv(c35, xvalued);
+    while(xvalued!= endmark)
+    {
+        if (xvalued%5 !=0)
+	{
+        	send(c57, xvalued);
+	}
+
+        recv(c35, xvalued);        
+    }
+    send(c57 , endmark);
+    
+}
+void P7()
+{
+    int xvalued;
+    recv(c57, xvalued);
+    while(xvalued!= endmark)
+    {
+        if (xvalued%7 !=0)
+	{
+        	send(c7o, xvalued);
+	}
+
+        recv(c57, xvalued);
+    }
+    send(c7o , endmark);
+    
+}
+
+main()
+{
+    int i;
+    int xvalued;
+    fork P2();  
+    fork P3();  
+    fork P5();  
+    fork P7(); 
+    for(i=2; i<100; i++) 
+    {
+    	send(c2in,i);
+    }
+    send(c2in,endmark);
+    recv(c7o,xvalued);
+    while(xvalued!= endmark)
+    {
+        cout << xvalued << endl;
+        recv(c7o, xvalued); 
+    }   
+             
+    
+}

@@ -1,0 +1,78 @@
+#define endmark 1000
+
+double stream cx;
+double stream cy;
+double stream cz;
+
+double stream cxx;
+double stream cyy;
+double stream czz;
+
+
+void PX()
+{
+    double x, y, z;
+    int i;
+
+    for(i=1; i<endmark;i++)
+    {
+	recv(cy, y);
+    	recv(cz, z);
+    	x = (8 - y + z)/2;
+
+    	send(cx, x);
+	send(cxx, x);
+    }
+    cout << "x:" << x << endl;
+}
+void PY()
+{
+    double x, y ,z;
+    int i;
+
+
+    for(i=1; i<endmark;i++)
+    {
+    	recv(cx, x);
+    	recv(czz, z);
+	y = (17 - 3*x + 2*z)/ 3;
+
+    	send(cy, y);
+   	send(cyy, y);
+    }
+
+    cout << "y:" << y << endl;
+}
+void PZ()
+{
+    double x, y ,z;
+    int i;
+
+    for(i=1; i<endmark;i++)
+    {
+    	recv(cxx, x);
+    	recv(cyy, y);
+	z = (-3 +2*x -y) / 2;
+
+    	send(cz, z);
+   	send(czz, z);
+    }
+
+    cout << "z:" << z << endl;
+}
+
+main()
+{
+    send(cx, 0);
+    send(cy, 0);
+    send(cz, 0);
+    send(cxx, 0);
+    send(cyy, 0);
+    send(czz, 0);
+
+    fork PX();  
+    fork PY();    
+    fork PZ();
+    
+	return 0;
+}

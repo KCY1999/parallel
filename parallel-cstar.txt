@@ -1,0 +1,48 @@
+#include <math.h>
+#define endmark 1000
+float stream x2y;
+float stream y2x;
+
+void PX()
+{
+	float x;
+	float y;
+	float tempy;
+	int i = 1;
+	while(i <= endmark)
+	{
+		recv(x2y, y);
+		tempy = y;
+		x = sqrt(5 - y);
+		send(y2x, x);
+		i++;
+	}
+	cout << "x = " << x << endl;
+}
+
+void PY()
+{
+	float x;
+	float y;
+	float tempx;
+	int i = 1;
+	while(i <= endmark)
+	{
+		recv(y2x, x);
+		tempx = x;
+		y = sqrt(7 - (x * x));
+		send(x2y, y);
+		i++;
+	}
+	cout << "y = " << y << endl;
+}
+
+int main()
+{
+	float x = 0;
+	float y = 0;
+	fork PX();
+	fork PY();
+	send(x2y, x);
+	send(y2x, y);
+}
